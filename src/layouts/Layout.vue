@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="overflow-hidden relative min-h-screen">
     <v-header/>
     <main>
       <slot/>

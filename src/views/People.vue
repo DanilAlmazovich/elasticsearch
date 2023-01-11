@@ -2,7 +2,7 @@
   <Layout>
     <div>
       <div class="flex justify-center py-8">
-        <input class="w-1/3 border border-solid border-gray-600 py-2 px-4"
+        <input class="w-1/3 md:w-2/3 sm:w-full sm:mx-6 w-1/3 border border-solid border-gray-600 py-2 px-4"
                placeholder="search..."
                v-model="searchValue"
                @input="searchInput"
