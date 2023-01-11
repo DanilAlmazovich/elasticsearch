@@ -6,6 +6,9 @@ module.exports = {
     "./src/**/*.{vue,js,ts,jsx,tsx}",
   ],
   theme: {
+    screens: {
+      'sm': {'max': '400px'},
+    },
     extend: {},
   },
   plugins: [],
