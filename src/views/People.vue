@@ -13,7 +13,7 @@
           <span class="text-blue-600">{{ searchValue }}</span>
         </p>
         <div v-for="item in result" :key="item">
-          <card :item="item"/>
+          <card :item="item" type="person"/>
         </div>
       </div>
       <div class="px-6" v-else>

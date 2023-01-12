@@ -9,11 +9,11 @@
                type="text">
       </div>
       <div class="px-6" v-if="result.length">
-        <p class="text-sm font-medium text-gray-400 mb-10 ">Результат запроса по
+        <p class="text-sm font-medium text-gray-400 mb-10" v-if="searchValue.length">Результат запроса по
           <span class="text-blue-600">{{ searchValue }}</span>
         </p>
         <div v-for="item in result" :key="item">
-          <card :item="item"/>
+          <card :item="item" type="shows"/>
         </div>
       </div>
       <div class="px-6" v-else>
@@ -35,20 +35,39 @@ export default {
   }),
   methods: {
     searchInput() {
-      this.controller.abort()
-      this.controller = new AbortController()
-      this.search()
+        this.controller.abort()
+        this.controller = new AbortController()
+        this.search()
     },
     async search() {
-      const URL = 'https://api.tvmaze.com/search/shows?q='
-      const response = await fetch(`${URL}${this.searchValue}`, {
-        method: 'GET',
-        signal: this.controller.signal
-      })
+      if(this.searchValue.length) {
+        const URL = 'https://api.tvmaze.com/search/shows?q='
+        const response = await fetch(`${URL}${this.searchValue}`, {
+          method: 'GET',
+          signal: this.controller.signal
+        })
+        const data = await response.json()
+        this.result = await data.map(item => ({
+          ...item.show
+        }))
+      }
+    },
+    async getAllShows() {
+      const URL = 'https://api.tvmaze.com/shows'
+      const response = await fetch(URL)
       const data = await response.json()
-      this.result = await data.map(item => ({
-        ...item.show
-      }))
+      this.result = await data.filter(item => item.id < 50)
+      console.log(this.result)
+    }
+  },
+  mounted() {
+    this.getAllShows()
+  },
+  watch: {
+    searchValue() {
+      if(!this.searchValue.length) {
+        this.getAllShows()
+      }
     }
   }
 }
