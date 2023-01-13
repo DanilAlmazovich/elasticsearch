@@ -1,15 +1,16 @@
 <template>
   <Layout>
     <div v-if="show" class="mb-8">
-      <div class="w-full h-auto">
+      <div class="w-1/2 md:w-full h-auto mx-auto">
         <img class="w-full h-auto" :src="show?.image?.original || 'https://upload.wikimedia.org/wikipedia/ru/thumb/a/ac/No_image_available.svg/1200px-No_image_available.svg.png'" alt="">
       </div>
       <div class="px-4 py-4" v-html="show.summary"/>
     </div>
     <h4 class="text-6xl py-6 px-4">Seasons</h4>
-    <div v-if="seasons">
-      <div v-for="season in seasons" class="relative">
+    <div v-if="seasons" class="flex flex-wrap">
+      <div v-for="season in seasons" class="relative w-1/3 ">
         <img v-if="season.image"
+             class="w-full"
              :src="season?.image?.original || 'https://upload.wikimedia.org/wikipedia/ru/thumb/a/ac/No_image_available.svg/1200px-No_image_available.svg.png'" alt="">
         <div v-if="season.image"
              class="absolute w-full h-full left-0 top-0 bg-gray-900/50 flex items-center justify-center">
@@ -17,14 +18,23 @@
         </div>
       </div>
     </div>
+    <h4 class="text-6xl py-6 px-4">Cast</h4>
+    <div v-for="cast in casts">
+      <cast-show :cast="cast"/>
+    </div>
   </Layout>
 </template>
 <script>
+import CastShow from '@/components/CastShow.vue'
 export default {
   data: () => ({
     show: null,
-    seasons: null
+    seasons: null,
+    casts: null
   }),
+  components: {
+    CastShow
+  },
   methods: {
     async getShow() {
       const URL = 'https://api.tvmaze.com/shows/'
@@ -37,11 +47,18 @@ export default {
       const response = await fetch(`${URL}`)
       const data = await response.json()
       this.seasons = await data
+    },
+    async getCasts() {
+      const URL = `https://api.tvmaze.com/shows/${this.$route.params.id}/cast`
+      const response = await fetch(`${URL}`)
+      const data = await response.json()
+      this.casts = await data
     }
   },
   mounted() {
     this.getShow()
     this.getSeason()
+    this.getCasts()
   }
 }
 

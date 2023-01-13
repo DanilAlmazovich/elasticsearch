@@ -8,11 +8,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@toneflix-code/flickity-vue": "^1.0.1",
-    "flickity": "^3.0.0",
     "moment": "^2.29.4",
+    "swiper": "^8.4.5",
     "vue": "^3.2.45",
-    "vue-flickity": "^1.2.1",
     "vue-router": "^4.1.6"
   },
   "devDependencies": {
