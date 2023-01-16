@@ -4,6 +4,10 @@
       <div class="w-1/2 md:w-full h-auto mx-auto">
         <img class="w-full h-auto" :src="show?.image?.original || 'https://upload.wikimedia.org/wikipedia/ru/thumb/a/ac/No_image_available.svg/1200px-No_image_available.svg.png'" alt="">
       </div>
+      <div class="flex items-center py-8 px-4" v-if="rating">
+        <star-rating class="w-auto m-0 p-0" :numberOfStars="10" :showControl="false" :disableClick="true" :step=".2" v-model="rating"></star-rating>
+        <span class="ml-2 text-lg">{{ show.rating.average }}</span>
+      </div>
       <div class="px-4 py-4" v-html="show.summary"/>
     </div>
     <h4 class="text-6xl py-6 px-4">Seasons</h4>
@@ -26,14 +30,17 @@
 </template>
 <script>
 import CastShow from '@/components/CastShow.vue'
+import vue3StarRatings from "vue3-star-ratings";
 export default {
   data: () => ({
     show: null,
     seasons: null,
-    casts: null
+    casts: null,
+    rating: 0
   }),
   components: {
-    CastShow
+    CastShow,
+    'star-rating': vue3StarRatings
   },
   methods: {
     async getShow() {
@@ -55,10 +62,11 @@ export default {
       this.casts = await data
     }
   },
-  mounted() {
-    this.getShow()
-    this.getSeason()
-    this.getCasts()
+  async mounted() {
+    await this.getShow()
+    await this.getSeason()
+    await this.getCasts()
+    this.rating = +this.show.rating.average
   }
 }
 
