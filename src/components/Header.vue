@@ -1,5 +1,5 @@
 <template>
-  <header ref="header" class="shadow-lg shadow-indigo-500/50 px-6 py-4 flex justify-end bg-purple-100" v-if="header.length">
+  <header ref="header" class="shadow-lg shadow-indigo-500/50 px-6 py-4 flex justify-end bg-purple-100">
     <div class="flex sm:hidden items-center">
       <div v-for="item in header" class="ml-4">
         <router-link :to="item.link"
@@ -47,14 +47,9 @@ export default {
   computed: {
     ...mapStores(useHeaderStore)
   },
-  methods: {
-    async getHeader() {
-      const res = await fetch('http://localhost:3000/header')
-      this.header = await res.json()
-    },
-  },
   async mounted() {
-    await this.getHeader()
+    if(!this.headerStore.headerContent) await this.headerStore.getHeader()
+    this.header = await this.headerStore.headerContent
     this.headerStore.headerHeight = await this.$refs.header.clientHeight
   },
 

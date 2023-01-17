@@ -8,7 +8,7 @@
       </div>
       <p class="first-letter:text-blue-500 first-letter:font-semibold">{{ item.name }}</p>
     </div>
-    <button class="border border-solid border-gray-400">Favorite</button>
+    <button class="border border-solid border-gray-400 px-2 py-1" @click.prevent="addFavorite">Favorite</button>
   </router-link>
 </template>
 <script>
@@ -23,6 +23,11 @@ export default {
     type: {
       type: String,
       default: ''
+    },
+  },
+  methods: {
+    addFavorite() {
+      this.$emit('addFavorite', this.item)
     }
   }
 }

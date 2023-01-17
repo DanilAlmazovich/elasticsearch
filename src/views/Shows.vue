@@ -13,7 +13,7 @@
           <span class="text-blue-600">{{ searchValue }}</span>
         </p>
         <div v-for="item in result" :key="item">
-          <card :item="item" type="shows"/>
+          <card @addFavorite="addFavorite" :item="item" type="shows"/>
         </div>
       </div>
       <div class="px-6" v-else>
@@ -34,6 +34,18 @@ export default {
     result: []
   }),
   methods: {
+    async addFavorite(show) {
+      const options = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(show)
+      }
+      const URL = 'http://localhost:3000/favourite'
+      const response = await fetch(URL, options)
+      const data = response.json()
+    },
     searchInput() {
         this.controller.abort()
         this.controller = new AbortController()
