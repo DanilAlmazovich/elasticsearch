@@ -7,9 +7,8 @@
 export default {
   methods: {
     async getShow() {
-      const res = await fetch('https://api.tvmaze.com/shows/19')
+      const res = await fetch(`${import.meta.env.VITE_CONTENT_URL}/shows/19`)
       const data = await res.json()
-      console.log(data)
     }
   },
   mounted() {

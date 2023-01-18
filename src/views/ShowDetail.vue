@@ -44,19 +44,19 @@ export default {
   },
   methods: {
     async getShow() {
-      const URL = 'https://api.tvmaze.com/shows/'
+      const URL = `${import.meta.env.VITE_CONTENT_URL}/shows/`
       const response = await fetch(`${URL}${this.$route.params.id}`)
       const data = await response.json()
       this.show = await data
     },
     async getSeason() {
-      const URL = `https://api.tvmaze.com/shows/${this.$route.params.id}/seasons`
+      const URL = `${import.meta.env.VITE_CONTENT_URL}/shows/${this.$route.params.id}/seasons`
       const response = await fetch(`${URL}`)
       const data = await response.json()
       this.seasons = await data
     },
     async getCasts() {
-      const URL = `https://api.tvmaze.com/shows/${this.$route.params.id}/cast`
+      const URL = `${import.meta.env.VITE_CONTENT_URL}/shows/${this.$route.params.id}/cast`
       const response = await fetch(`${URL}`)
       const data = await response.json()
       this.casts = await data

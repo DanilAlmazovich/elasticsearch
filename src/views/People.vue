@@ -40,7 +40,7 @@ export default {
       this.search()
     },
     async search() {
-      const URL = 'https://api.tvmaze.com/search/people?q='
+      const URL = `${import.meta.env.VITE_CONTENT_URL}/search/people?q=`
       const response = await fetch(`${URL}${this.searchValue}`, {
         method: 'GET',
         signal: this.controller.signal

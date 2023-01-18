@@ -13,7 +13,10 @@
           <span class="text-blue-600">{{ searchValue }}</span>
         </p>
         <div v-for="item in result" :key="item">
-          <card @addFavorite="addFavorite" :item="item" type="shows"/>
+          <card @deleteFavorite="deleteFavorite"
+                @addFavorite="addFavorite"
+                :item="item"
+                type="shows"/>
         </div>
       </div>
       <div class="px-6" v-else>
@@ -23,10 +26,15 @@
   </Layout>
 </template>
 <script>
+import { mapStores } from "pinia";
+import { useHeaderStore } from "@/stores/header";
 import Card from '@/components/Card.vue'
 export default {
   components: {
     Card
+  },
+  computed: {
+    ...mapStores(useHeaderStore)
   },
   data: () => ({
     searchValue: '',
@@ -34,16 +42,31 @@ export default {
     result: []
   }),
   methods: {
+    async deleteFavorite(show) {
+      console.log('delete', show)
+      const options = {
+        method: 'DELETE',
+      }
+      const URL = `${import.meta.env.VITE_SERVER_URL}/favourite/${show.id}.json`
+      const response = await fetch(URL, options)
+      if(response.ok) {
+        this.headerStore.getFavourite()
+      }
+      const data = response.json()
+    },
     async addFavorite(show) {
       const options = {
-        method: 'POST',
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(show)
       }
-      const URL = 'http://localhost:3000/favourite'
+      const URL = `${import.meta.env.VITE_SERVER_URL}/favourite/${show.id}.json`
       const response = await fetch(URL, options)
+      if(response.ok) {
+        this.headerStore.getFavourite()
+      }
       const data = response.json()
     },
     searchInput() {
@@ -53,7 +76,7 @@ export default {
     },
     async search() {
       if(this.searchValue.length) {
-        const URL = 'https://api.tvmaze.com/search/shows?q='
+        const URL = `${import.meta.env.VITE_CONTENT_URL}/search/shows?q=`
         const response = await fetch(`${URL}${this.searchValue}`, {
           method: 'GET',
           signal: this.controller.signal
@@ -65,11 +88,10 @@ export default {
       }
     },
     async getAllShows() {
-      const URL = 'https://api.tvmaze.com/shows'
+      const URL = `${import.meta.env.VITE_CONTENT_URL}/shows`
       const response = await fetch(URL)
       const data = await response.json()
       this.result = await data.filter(item => item.id < 50)
-      console.log(this.result)
     }
   },
   mounted() {

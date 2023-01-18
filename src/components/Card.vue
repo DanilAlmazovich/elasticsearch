@@ -8,10 +8,18 @@
       </div>
       <p class="first-letter:text-blue-500 first-letter:font-semibold">{{ item.name }}</p>
     </div>
-    <button class="border border-solid border-gray-400 px-2 py-1" @click.prevent="addFavorite">Favorite</button>
+    <button :class="{'bg-red-500': status}"
+            class="border border-solid border-gray-400 px-2 py-1"
+            @click.prevent="favorite">
+      <span v-if="!status">Favorite</span>
+      <span v-else>Delete</span>
+      </button>
   </router-link>
 </template>
 <script>
+import { mapStores } from "pinia";
+import { useHeaderStore } from "@/stores/header";
+
 export default {
   props: {
     item: {
@@ -25,10 +33,23 @@ export default {
       default: ''
     },
   },
-  methods: {
-    addFavorite() {
-      this.$emit('addFavorite', this.item)
+  computed: {
+    ...mapStores(useHeaderStore),
+    status() {
+      if(this.headerStore.favourite) {
+        return this.headerStore.favourite.
+        find(item => item.id === this.item.id) || null
+      }
     }
-  }
+  },
+  methods: {
+    favorite() {
+      if(this.status) {
+        this.$emit('deleteFavorite', this.item)
+      }else {
+        this.$emit('addFavorite', this.item)
+      }
+    }
+  },
 }
 </script>

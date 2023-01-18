@@ -24,7 +24,7 @@ export default {
   }),
   methods: {
     async getPerson() {
-      const URL = `https://api.tvmaze.com/people/${this.$route.params.id}`
+      const URL = `people/${this.$route.params.id}`
       const response = await fetch(URL)
       const data = await response.json()
       this.person = await data

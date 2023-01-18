@@ -3,8 +3,16 @@
     <div class="flex sm:hidden items-center">
       <div v-for="item in header" class="ml-4">
         <router-link :to="item.link"
+                     v-if="item.link !== '/favorite-show'"
                      :class="{'text-blue-500 underline': $route.path === item.link}"
                      class="text-base font-medium">{{ item.name }}
+        </router-link>
+        <router-link :to="item.link"
+                     v-else
+                     :class="{'text-blue-500 underline': $route.path === item.link}"
+                     class="text-base font-medium">{{ item.name }}
+                    <span class="absolute text-xs w-4 h-4 text-center right-[10px] top-[10px] text-white bg-red-500 rounded-full">
+                      {{ headerStore.favouriteLength }}</span>
         </router-link>
       </div>
     </div>
@@ -24,6 +32,12 @@
         </button>
         <div v-for="item in header" class="ml-4 mb-6">
           <router-link :to="item.link"
+                       v-if="item.link !== '/favorite-show'"
+                       :class="{'text-blue-500 underline': $route.path === item.link}"
+                       class="text-base font-medium">{{ item.name }}
+          </router-link>
+          <router-link :to="item.link"
+                       v-else
                        :class="{'text-blue-500 underline': $route.path === item.link}"
                        class="text-base font-medium">{{ item.name }}
           </router-link>
@@ -51,6 +65,7 @@ export default {
     if(!this.headerStore.headerContent) await this.headerStore.getHeader()
     this.header = await this.headerStore.headerContent
     this.headerStore.headerHeight = await this.$refs.header.clientHeight
+    await this.headerStore.getFavourite()
   },
 
 }

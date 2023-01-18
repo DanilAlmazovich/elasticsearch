@@ -36,10 +36,9 @@ export default {
   },
   methods: {
     async getAllShows() {
-      const URL = 'https://api.tvmaze.com/shows'
+      const URL = `${import.meta.env.VITE_CONTENT_URL}/shows`
       const response = await fetch(URL)
       const data = await response.json()
-      console.log(data)
       this.thriller = await data
           .filter(item => item.genres[2] === 'Thriller')
       this.horror = await data
@@ -48,7 +47,7 @@ export default {
           .filter(item => item.genres[1] === 'Crime')
     },
     async getPromoImage(id) {
-      const response = await fetch(`https://api.tvmaze.com/shows/${id}/images`)
+      const response = await fetch(`${import.meta.env.VITE_CONTENT_URL}/shows/${id}/images`)
       if(response.ok) {
         this.random.push(id)
         const data = await response.json()
